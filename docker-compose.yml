@@ -1,0 +1,31 @@
+services:
+  traefik:
+    container_name: traefik
+    image: traefik:v3.3
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    networks:
+      - "reverse-proxy"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./traefik/letsencrypt:/letsencrypt"
+      - "./traefik/config:/etc/traefik"
+      - "./traefik/logs:/var/log/traefik"
+
+  nginx:
+    container_name: nginx
+    image: nginx:alpine
+    networks:
+      - "reverse-proxy"
+    volumes:
+      - "./nginx/conf.d:/etc/nginx/conf.d"
+      - "./nginx/www:/var/www"
+    labels:
+      - "traefik.enable=false"
+
+networks:
+  reverse-proxy:
+    name: "reverse-proxy"
+    driver: bridge
