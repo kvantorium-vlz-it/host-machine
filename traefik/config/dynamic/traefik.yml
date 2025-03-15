@@ -1,0 +1,42 @@
+http:
+  routers:
+    static-project1:
+      # rule: "Host(`subdomain.domain.ru`)"
+      # entryPoints: ["websecure"]
+      # service: nginx
+      # tls:
+      #   certResolver: letsencrypt
+
+    # static-project2:
+    #   rule: "Host(`subdomain.domain.ru`)"
+    #   entryPoints: ["web"]
+    #   service: nginx
+
+    dashboard:
+      rule: "Host(`traefik.kvantoriumvlz.ru`)"
+      entryPoints: ["websecure"]
+      service: api@internal
+      middlewares:
+        - auth-middleware
+        - secure-headers
+      tls:
+        certResolver: letsencrypt
+
+  services:
+    nginx:
+      loadBalancer:
+        servers:
+          - url: "http://nginx:80"
+
+  middlewares:
+    auth-middleware:
+      basicAuth:
+        users:
+          - "toombez:{SHA}S3Hcj5ou0eb+9AB1nf8vjk09l7E="
+    secure-headers:
+      headers:
+        sslRedirect: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 31536000
+        frameDeny: true
