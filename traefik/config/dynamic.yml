@@ -1,0 +1,41 @@
+http:
+  routers:
+    # websecure-project:
+      # rule: "Host(`subdomain.domain`)"
+      # entryPoints: ["websecure"]
+      # service: nginx
+      # tls:
+      #   certResolver: letsencrypt
+
+    # web-project:
+    #   rule: "Host(`subdomain.domain`)"
+    #   entryPoints: ["web"]
+    #   service: nginx
+
+    # dashboard:
+    #   rule: "Host(`subdomain.domain`)"
+    #   entryPoints: ["websecure"]
+    #   service: api@internal
+    #   middlewares:
+    #     - auth-middleware
+    #     - secure-headers
+    #   tls:
+    #     certResolver: letsencrypt
+
+  services:
+    nginx:
+      loadBalancer:
+        servers:
+          - url: "http://nginx:80"
+
+  middlewares:
+    # auth-middleware:
+    #   basicAuth:
+    #     users:
+    secure-headers:
+      headers:
+        sslRedirect: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 31536000
+        frameDeny: true

@@ -5,14 +5,17 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080"
     networks:
       - "reverse-proxy"
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-      - "./traefik/letsencrypt:/letsencrypt"
-      - "./traefik/config:/etc/traefik"
-      - "./traefik/logs:/var/log/traefik"
+      # docker socket
+      - /var/run/docker.sock:/var/run/docker.sock
+      # letsencrypt sertification
+      - ./traefik/letsencrypt:/letsencrypt
+      # traefik configs
+      - ./traefik/config:/etc/traefik:ro
+      # traefik logs
+      - ./traefik/logs:/var/log/traefik
 
   nginx:
     container_name: nginx
