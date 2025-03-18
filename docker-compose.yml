@@ -32,7 +32,7 @@ services:
       # nginx logs
       - ./nginx/logs/access.log:/var/log/nginx/access.log
     labels:
-      - "traefik.enable=false"
+      - "traefik.enable=true"
 
 networks:
   reverse-proxy:
